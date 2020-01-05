@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_send_bird_chat.*
 
 
-class SendBirdChatActivity : AppCompatActivity() {
+class SendBirdOpenChatActivity : AppCompatActivity() {
 
     val userId = "MyMurad-01"
     var channelUrl = "sendbird_open_channel_61863_5d64dd30c4defce9450fb1d8c33a25017e70e24a"
@@ -66,7 +66,6 @@ class SendBirdChatActivity : AppCompatActivity() {
                     Log.e("onConnected", "YES")
                 }
             }
-
         })
 
     }

@@ -13,8 +13,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         btnSendBirdChat.setOnClickListener {
-            val intent = Intent(this@MainActivity, SendBirdChatActivity::class.java)
+            val intent = Intent(this@MainActivity, SendBirdOpenChatActivity::class.java)
             startActivity(intent)
+        }
+
+        btnStartPrivateChat.setOnClickListener {
+            startActivity(Intent(this@MainActivity, SendBirdPrivateChatInvitationActivity::class.java))
         }
     }
 
