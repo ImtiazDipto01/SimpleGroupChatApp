@@ -13,7 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Create Private Chat Channel"
-        android:layout_margin="10dp"/>
+        android:layout_margin="10dp"
+        android:visibility="gone"/>
 
     <Button
         android:id="@+id/btnAcceptInvitation"

@@ -29,19 +29,46 @@
             android:id="@+id/etUserMessage"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight=".75"
+            android:layout_weight=".7"
             android:hint="Send Your Thought">
 
         </EditText>
 
-        <Button
+        <LinearLayout
+            android:id="@+id/btnSendSticker"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.15"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_sticker">
+
+            </ImageView>
+
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/btnSendMessage"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.25"
-            android:text="SEND">
+            android:layout_height="match_parent"
+            android:layout_weight="0.15"
+            android:gravity="center">
 
-        </Button>
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_send">
+
+            </ImageView>
+
+        </LinearLayout>
+
+
 
 
     </LinearLayout>

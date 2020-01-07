@@ -1,18 +1,26 @@
 package com.example.myapplication.activity
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSmoothScroller
+import androidx.recyclerview.widget.RecyclerView.SmoothScroller
 import com.example.myapplication.R
 import com.example.myapplication.adapter.ChattingAdapter
+import com.example.myapplication.fragment.PhotosBottomDialogFragment
+import com.example.myapplication.utils.App
 import com.example.myapplication.utils.Messages
+import com.example.myapplication.utils.Sticker
 import com.sendbird.android.*
+import com.sendbird.android.BaseChannel.SendFileMessageHandler
 import com.sendbird.android.BaseChannel.SendUserMessageHandler
 import kotlinx.android.synthetic.main.activity_private_chat_window.*
+import java.io.*
 
-class PrivateChatWindowActivity : AppCompatActivity() {
+
+class PrivateChatWindowActivity : AppCompatActivity(), PhotosBottomDialogFragment.StickerListener {
 
     val userId = "MyPc-01"
     //val userId = "Imtiaz-01"
@@ -22,6 +30,7 @@ class PrivateChatWindowActivity : AppCompatActivity() {
     var privateChatUrl = "sendbird_group_channel_189317504_ba5ab0a7e6e6a04402b20ee6ee9c580011898dd6"
     val TAG = "PrivateChatInvite"
     var groupChannelForPrivateChat : GroupChannel? = null
+    lateinit var smoothScroller: SmoothScroller
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +42,18 @@ class PrivateChatWindowActivity : AppCompatActivity() {
 
         btnSendMessage.setOnClickListener {
             sendMessage()
+        }
+
+        btnSendSticker.setOnClickListener {
+            val addPhotFromBottomDialog = PhotosBottomDialogFragment()
+            addPhotFromBottomDialog.stickerListener = this
+            addPhotFromBottomDialog.show(supportFragmentManager, "PhotosBottomDialogFragment")
+        }
+
+        smoothScroller = object : LinearSmoothScroller(applicationContext) {
+            override fun getVerticalSnapPreference(): Int {
+                return SNAP_TO_ANY
+            }
         }
     }
 
@@ -65,24 +86,17 @@ class PrivateChatWindowActivity : AppCompatActivity() {
         }
     }
 
-    private fun setdemoData(){
-        for(i in 1..4){
-            if(i % 2 == 0){
-                list.add(Messages("Hello !!!", 1))
-            }
-            else{
-                list.add(Messages("Hi !!!", 0))
-            }
-        }
-    }
-
     fun notifyEventHandler(){
         SendBird.addChannelHandler(privateChatUrl, object : SendBird.ChannelHandler(){
             override fun onMessageReceived(p0: BaseChannel?, baseMessage: BaseMessage?) {
                 baseMessage?.let {
                     if(it is UserMessage){
                         //Toast.makeText(this@PrivateChatWindowActivity, it.message, Toast.LENGTH_SHORT).show()
-                        list.add(Messages(it.message, 0))
+                        list.add(Messages(it.message, App.RECEIVER_MSG))
+                        chattingAdapter.notifyDataSetChanged()
+                    }
+                    else if(it is FileMessage){
+                        list.add(Messages(it.url, App.RECEIVER_STICKER))
                         chattingAdapter.notifyDataSetChanged()
                     }
                 }
@@ -109,9 +123,77 @@ class PrivateChatWindowActivity : AppCompatActivity() {
             }
             else{
                 Log.e(TAG, "sendMessage : ${userMessage.message}")
-                list.add(Messages(userMessage.message, 1))
+                list.add(Messages(userMessage.message, App.SENDER_MSG))
                 chattingAdapter.notifyDataSetChanged()
             }
         })
+    }
+
+    override fun stickerClickedDataPassToActivity(sticker: Sticker) {
+        sendSticker(sticker)
+    }
+
+    private fun sendSticker(sticker: Sticker) {
+        val file = createStickerAsFile(sticker)
+
+        file?.let {
+
+            Log.e(TAG, "sendStickerExp : File Not Null")
+            val params = FileMessageParams()
+                .setFile(it)
+                .setFileName(it.name)
+
+            groupChannelForPrivateChat?.sendFileMessage(
+                params,
+                SendFileMessageHandler { fileMessage, e ->
+                    if (e != null) { // Error.
+                        Log.e(TAG, "sendStickerExp : $e")
+                        return@SendFileMessageHandler
+                    }
+                    else{
+                        Log.e(TAG, "sendSticker : Success, {${fileMessage.url.toString()}}")
+                        list.add(Messages(fileMessage.url, App.SENDER_STICKER))
+                        chattingAdapter.notifyDataSetChanged()
+                    }
+                })
+        }
+
+    }
+
+    fun createStickerAsFile(sticker: Sticker) : File?{
+        try
+        {
+            val file = File(cacheDir, "myFile")
+            val inputStream : InputStream? = resources.openRawResource(sticker.drawable)
+            val out : OutputStream = FileOutputStream(file)
+
+            val buf = ByteArray(1024)
+            var len : Int
+            var lenIsNotZero = true
+            while(lenIsNotZero){
+                if(inputStream != null){
+                    len = inputStream.read(buf)
+                    if(len > 0){
+                        Log.e(TAG, "len is not 0")
+                        out.write(buf,0,len)
+                    }
+                    else {
+                        Log.e(TAG, "len is 0")
+                        lenIsNotZero = false
+                    }
+                }
+                else{
+                    lenIsNotZero = false
+                }
+
+            }
+            out.close()
+            if(inputStream != null) inputStream.close()
+
+            return file
+        }
+        catch (e : IOException){
+            return null
+        }
     }
 }
