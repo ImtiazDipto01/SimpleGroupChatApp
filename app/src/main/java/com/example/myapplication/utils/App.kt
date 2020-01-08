@@ -12,6 +12,8 @@ class App : Application() {
         val RECEIVER_MSG = 2
         val SENDER_STICKER = 3
         val RECEIVER_STICKER = 4
+        val PREF_NAME = "SendBirdChatApp"
+        val LAST_SEEN_TIMEMILLI = "lastSeenTimeMillis"
     }
 
     override fun onCreate() {

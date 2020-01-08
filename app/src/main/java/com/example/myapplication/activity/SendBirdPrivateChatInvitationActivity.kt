@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.activity_send_bird_private_chat.*
 class SendBirdPrivateChatInvitationActivity : AppCompatActivity() {
 
     val userId = "MyPc-01"
-    //val userId = "Imtiaz-01"
+    // val userId = "Imtiaz-01"
     var privateChatUrl = "sendbird_group_channel_189317504_ba5ab0a7e6e6a04402b20ee6ee9c580011898dd6"
     val TAG = "PrivateChatInvite"
     var groupChannelForPrivateChat : GroupChannel? = null
