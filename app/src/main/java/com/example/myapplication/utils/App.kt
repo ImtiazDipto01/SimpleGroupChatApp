@@ -14,6 +14,8 @@ class App : Application() {
         val RECEIVER_STICKER = 4
         val PREF_NAME = "SendBirdChatApp"
         val LAST_SEEN_TIMEMILLI = "lastSeenTimeMillis"
+        val USER_ID = "UserId"
+        val CHANNEL_URL = "channelUrl"
     }
 
     override fun onCreate() {

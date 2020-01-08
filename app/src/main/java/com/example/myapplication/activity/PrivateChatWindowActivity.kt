@@ -27,7 +27,7 @@ import java.sql.Types.TIMESTAMP
 class PrivateChatWindowActivity : AppCompatActivity(), PhotosBottomDialogFragment.StickerListener,
     View.OnClickListener {
 
-    var privateChatUrl = "sendbird_group_channel_189317504_ba5ab0a7e6e6a04402b20ee6ee9c580011898dd6"
+    var privateChatUrl = ""
     val TAG = "PrivateChatInvite"
     //val userId = "MyPc-01"
     //val userId = "Imtiaz-01"
@@ -45,9 +45,18 @@ class PrivateChatWindowActivity : AppCompatActivity(), PhotosBottomDialogFragmen
         setContentView(R.layout.activity_private_chat_window)
         initInstance()
         initViewListener()
+        getValuesFromIntent()
         generateRecyclerView()
         getChannelInstanceForCheckingChannelInvitation()
         notifyEventHandler()
+    }
+
+    private fun getValuesFromIntent() {
+        if(intent.hasExtra(App.CHANNEL_URL)){
+            intent.getStringExtra(App.CHANNEL_URL)?.let {
+                privateChatUrl = it
+            }
+        }
     }
 
     private fun initViewListener() {
@@ -61,6 +70,10 @@ class PrivateChatWindowActivity : AppCompatActivity(), PhotosBottomDialogFragmen
     }
 
     fun getChannelInstanceForCheckingChannelInvitation(){
+        if(privateChatUrl.equals("")){
+            Log.e(TAG, "privateChatUrleExp : privateChatUrl is Empty")
+            return
+        }
         GroupChannel.getChannel(privateChatUrl, object : GroupChannel.GroupChannelGetHandler{
             override fun onResult(groupChannel: GroupChannel?, exp: SendBirdException?) {
                 if(exp != null){
