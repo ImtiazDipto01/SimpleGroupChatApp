@@ -18,10 +18,12 @@ class PhotosBottomDialogFragment : BottomSheetDialogFragment(), StickerAdapter.S
     var stickerListener : StickerListener? = null
     val stickerList : List<Sticker> by lazy{
         val stickerList = mutableListOf<Sticker>()
-
-        stickerList.add(Sticker(R.drawable.discount))
-        stickerList.add(Sticker(R.drawable.free))
-
+        stickerList.add(Sticker("https://media.giphy.com/media/RKJUsDopW7pL2OnSzY/giphy.gif"))
+        stickerList.add(Sticker("https://media.giphy.com/media/NQ1YGdhp9gpnErlyYY/giphy.gif"))
+        stickerList.add(Sticker("https://media.giphy.com/media/TxWXgClHzwhji/giphy.gif"))
+        stickerList.add(Sticker("https://media.giphy.com/media/l4FGwbNesOqYDdZkI/giphy.gif"))
+        stickerList.add(Sticker("https://media.giphy.com/media/W5Bwcws7oDh6svLR2Y/giphy.gif"))
+        stickerList.add(Sticker("https://media.giphy.com/media/SvFWwIBGuK96ByH58g/giphy.gif"))
         stickerList
     }
 

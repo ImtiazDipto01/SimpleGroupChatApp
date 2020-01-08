@@ -30,6 +30,7 @@ class PrivateChatWindowActivity : AppCompatActivity(), PhotosBottomDialogFragmen
     var privateChatUrl = "sendbird_group_channel_189317504_ba5ab0a7e6e6a04402b20ee6ee9c580011898dd6"
     val TAG = "PrivateChatInvite"
     var groupChannelForPrivateChat : GroupChannel? = null
+
     lateinit var smoothScroller: SmoothScroller
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -94,10 +95,14 @@ class PrivateChatWindowActivity : AppCompatActivity(), PhotosBottomDialogFragmen
                         //Toast.makeText(this@PrivateChatWindowActivity, it.message, Toast.LENGTH_SHORT).show()
                         list.add(Messages(it.message, App.RECEIVER_MSG))
                         chattingAdapter.notifyDataSetChanged()
+
+                        rvMessagingList.smoothScrollToPosition(list.size - 1)
                     }
                     else if(it is FileMessage){
                         list.add(Messages(it.url, App.RECEIVER_STICKER))
                         chattingAdapter.notifyDataSetChanged()
+
+                        rvMessagingList.smoothScrollToPosition(list.size - 1)
                     }
                 }
             }
@@ -125,6 +130,8 @@ class PrivateChatWindowActivity : AppCompatActivity(), PhotosBottomDialogFragmen
                 Log.e(TAG, "sendMessage : ${userMessage.message}")
                 list.add(Messages(userMessage.message, App.SENDER_MSG))
                 chattingAdapter.notifyDataSetChanged()
+
+                rvMessagingList.smoothScrollToPosition(list.size - 1)
             }
         })
     }
@@ -134,29 +141,27 @@ class PrivateChatWindowActivity : AppCompatActivity(), PhotosBottomDialogFragmen
     }
 
     private fun sendSticker(sticker: Sticker) {
-        val file = createStickerAsFile(sticker)
 
-        file?.let {
+        Log.e(TAG, "sendStickerExp : File Not Null")
+        val params = FileMessageParams()
+            .setFileUrl(sticker.link)
+            .setFileName("myGif")
 
-            Log.e(TAG, "sendStickerExp : File Not Null")
-            val params = FileMessageParams()
-                .setFile(it)
-                .setFileName(it.name)
+        groupChannelForPrivateChat?.sendFileMessage(
+            params,
+            SendFileMessageHandler { fileMessage, e ->
+                if (e != null) { // Error.
+                    Log.e(TAG, "sendStickerExp : $e")
+                    return@SendFileMessageHandler
+                }
+                else{
+                    Log.e(TAG, "sendSticker : Success, {${fileMessage.url.toString()}}")
+                    list.add(Messages(fileMessage.url, App.SENDER_STICKER))
+                    chattingAdapter.notifyDataSetChanged()
 
-            groupChannelForPrivateChat?.sendFileMessage(
-                params,
-                SendFileMessageHandler { fileMessage, e ->
-                    if (e != null) { // Error.
-                        Log.e(TAG, "sendStickerExp : $e")
-                        return@SendFileMessageHandler
-                    }
-                    else{
-                        Log.e(TAG, "sendSticker : Success, {${fileMessage.url.toString()}}")
-                        list.add(Messages(fileMessage.url, App.SENDER_STICKER))
-                        chattingAdapter.notifyDataSetChanged()
-                    }
-                })
-        }
+                    rvMessagingList.smoothScrollToPosition(list.size - 1)
+                }
+            })
 
     }
 
@@ -164,7 +169,7 @@ class PrivateChatWindowActivity : AppCompatActivity(), PhotosBottomDialogFragmen
         try
         {
             val file = File(cacheDir, "myFile")
-            val inputStream : InputStream? = resources.openRawResource(sticker.drawable)
+            val inputStream : InputStream? = /*resources.openRawResource(/*sticker.drawable*/)*/ null
             val out : OutputStream = FileOutputStream(file)
 
             val buf = ByteArray(1024)

@@ -6,10 +6,15 @@ import android.graphics.drawable.BitmapDrawable
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.Priority
+import com.bumptech.glide.load.resource.bitmap.FitCenter
+import com.bumptech.glide.request.RequestOptions
 import com.example.myapplication.R
 import com.example.myapplication.utils.Sticker
 import com.example.myapplication.utils.inflate
 import kotlinx.android.synthetic.main.item_sticker_bottom_dialog.view.*
+import kotlinx.android.synthetic.main.item_sticker_sender.view.*
 
 class StickerAdapter(private val list: List<Sticker>, private val listener: StickerListener)
     : RecyclerView.Adapter<StickerAdapter.ViewHolder>() {
@@ -26,17 +31,24 @@ class StickerAdapter(private val list: List<Sticker>, private val listener: Stic
 
         init{
             itemView.setOnClickListener {
-                listener?.apply {
-                    stickerClicked(list.get(adapterPosition))
-                }
+                listener.stickerClicked(list.get(adapterPosition))
             }
         }
 
         @SuppressLint("SetTextI18n")
         fun bind(sticker: Sticker) {
-            this.sticker = sticker
-            val bitmap = BitmapFactory.decodeResource(itemView.photo.context.resources, this.sticker.drawable)
-            itemView.photo.setImageDrawable(BitmapDrawable(itemView.photo.context.resources, bitmap))
+            val options : RequestOptions = RequestOptions()
+                .transform(FitCenter())
+                .priority(Priority.HIGH)
+
+            Glide.with(itemView.context)
+                .asGif()
+                .load(sticker.link)
+                .apply(options)
+                .into(itemView.photo)
+
+           /* val bitmap = BitmapFactory.decodeResource(itemView.photo.context.resources, this.sticker.drawable)
+            itemView.photo.setImageDrawable(BitmapDrawable(itemView.photo.context.resources, bitmap))*/
         }
     }
 

@@ -64,6 +64,7 @@ class ChattingAdapter(var list: MutableList<Messages>, context : Context) : Recy
                     .priority(Priority.HIGH)
 
                 Glide.with(itemView.context)
+                    .asGif()
                     .load(messages.msg)
                     .apply(options)
                     .into(itemView.stickerSender)
@@ -74,6 +75,7 @@ class ChattingAdapter(var list: MutableList<Messages>, context : Context) : Recy
                     .priority(Priority.HIGH)
 
                 Glide.with(itemView.context)
+                    .asGif()
                     .load(messages.msg)
                     .apply(options)
                     .into(itemView.stickerReceiver)
