@@ -57,9 +57,11 @@ class UserListActivity : AppCompatActivity(), UserListAdapter.UserListener {
     }
 
     fun generateRecyclerView() {
-        rvUserList.layoutManager = LinearLayoutManager(applicationContext)
-        userListAdapter = UserListAdapter(userList, this)
-        rvUserList.adapter = userListAdapter
+        rvUserList.apply {
+            layoutManager = LinearLayoutManager(applicationContext)
+            userListAdapter = UserListAdapter(userList, this@UserListActivity)
+            adapter = userListAdapter
+        }
     }
 
     override fun userClicked(user: User) {

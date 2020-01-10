@@ -3,15 +3,12 @@ package com.example.myapplication.activity
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.provider.Telephony.BaseMmsColumns.MESSAGE_TYPE
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView.SmoothScroller
-import com.example.myapplication.R
 import com.example.myapplication.adapter.ChattingAdapter
 import com.example.myapplication.fragment.PhotosBottomDialogFragment
 import com.example.myapplication.utils.App
@@ -21,7 +18,7 @@ import com.sendbird.android.*
 import com.sendbird.android.BaseChannel.*
 import kotlinx.android.synthetic.main.activity_private_chat_window.*
 import java.io.*
-import java.sql.Types.TIMESTAMP
+import com.example.myapplication.R
 
 
 class PrivateChatWindowActivity : AppCompatActivity(), PhotosBottomDialogFragment.StickerListener,
@@ -29,8 +26,6 @@ class PrivateChatWindowActivity : AppCompatActivity(), PhotosBottomDialogFragmen
 
     var privateChatUrl = ""
     val TAG = "PrivateChatInvite"
-    //val userId = "MyPc-01"
-    //val userId = "Imtiaz-01"
     val CUSTOM_TYPE = "AllMessages"
 
     lateinit var chattingAdapter: ChattingAdapter
@@ -115,6 +110,7 @@ class PrivateChatWindowActivity : AppCompatActivity(), PhotosBottomDialogFragmen
                         chattingAdapter.notifyDataSetChanged()
                         rvMessagingList.smoothScrollToPosition(Msglist.size - 1)
                     }
+                    groupChannelForPrivateChat?.markAsRead()
                 }
             }
 
@@ -181,7 +177,7 @@ class PrivateChatWindowActivity : AppCompatActivity(), PhotosBottomDialogFragmen
 
     }
 
-    fun createStickerAsFile(sticker: Sticker) : File?{
+    fun createImageAsFile(sticker: Sticker) : File?{
         try
         {
             val file = File(cacheDir, "myFile")

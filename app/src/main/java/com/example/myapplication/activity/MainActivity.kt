@@ -66,8 +66,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
         if(v != null){
             when(v.id){
-                R.id.btnStartPrivateChat ->{
-                    //startActivity(Intent(this@MainActivity, SendBirdPrivateChatInvitationActivity::class.java))
+                R.id.btnStartPrivateChat -> {
                     startActivity(Intent(this@MainActivity, UserListActivity::class.java))
                 }
             }
