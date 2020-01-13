@@ -1,6 +1,7 @@
 package com.example.myapplication.activity
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
@@ -33,6 +34,7 @@ class PrivateChatWindowActivity : AppCompatActivity(), PhotosBottomDialogFragmen
     lateinit var sharedPreferences: SharedPreferences
     lateinit var smoothScroller: SmoothScroller
 
+    var userId : String? = null
     var groupChannelForPrivateChat : GroupChannel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,6 +44,7 @@ class PrivateChatWindowActivity : AppCompatActivity(), PhotosBottomDialogFragmen
         initViewListener()
         getValuesFromIntent()
         generateRecyclerView()
+        //connectToSendBird(userId)
         getChannelInstanceForCheckingChannelInvitation()
         notifyEventHandler()
     }
@@ -62,6 +65,7 @@ class PrivateChatWindowActivity : AppCompatActivity(), PhotosBottomDialogFragmen
     private fun initInstance() {
         Msglist = ArrayList<Messages>()
         sharedPreferences = getSharedPreferences(App.PREF_NAME, Context.MODE_PRIVATE)
+        userId = sharedPreferences.getString(App.USER_ID, null)
     }
 
     fun getChannelInstanceForCheckingChannelInvitation(){
@@ -248,11 +252,38 @@ class PrivateChatWindowActivity : AppCompatActivity(), PhotosBottomDialogFragmen
 
     }
 
+    private fun connectToSendBird(userIdTxt: String?) {
+        SendBird.connect(userIdTxt, object : SendBird.ConnectHandler {
+            override fun onConnected(user: User?, ex: SendBirdException?) {
+                if(ex != null){
+                    Toast.makeText(applicationContext,"Something Worng, Retry Or Try Later", Toast.LENGTH_SHORT).show()
+                }
+                else{
+                    user?.apply {
+                        Toast.makeText(applicationContext,"Connected !", Toast.LENGTH_SHORT).show()
+                        getChannelInstanceForCheckingChannelInvitation()
+                    }
+                }
+            }
+        })
+    }
+
+    fun disconnectFromSendBird(){
+        SendBird.disconnect(SendBird.DisconnectHandler {
+            Log.e(TAG, "SendBird Disconnected!")
+        })
+    }
 
     override fun onBackPressed() {
         super.onBackPressed()
         val timeMillis = System.currentTimeMillis()
         sharedPreferences.edit().putLong(App.LAST_SEEN_TIMEMILLI, timeMillis).apply()
+        //disconnectFromSendBird()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        //connectToSendBird(userId)
     }
 
     override fun onClick(v: View?) {

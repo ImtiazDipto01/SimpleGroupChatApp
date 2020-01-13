@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "44867849225",
+    "firebase_url": "https://sendbirdchatapp.firebaseio.com",
+    "project_id": "sendbirdchatapp",
+    "storage_bucket": "sendbirdchatapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:44867849225:android:b2907e36a6165b93b17cd8",
+        "android_client_info": {
+          "package_name": "com.example.myapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "44867849225-33sgonveenoeq0iudoqsnbslfnh6aulo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.myapplication",
+            "certificate_hash": "a7fb0fb47e8a8de63f8ac1560bb1e40594bb2402"
+          }
+        },
+        {
+          "client_id": "44867849225-987kotupgs8t5n5piudpfe2gm7s5jnuj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDLcP-0bMoSBtE9RbN382OLz9iyPc7STyg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "44867849225-987kotupgs8t5n5piudpfe2gm7s5jnuj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
