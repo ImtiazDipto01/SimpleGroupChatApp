@@ -49,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
                 android:layout_marginLeft="5dp"
-                android:text="Portonics Ltd"
+                android:text="XYZ Ltd"
                 android:textColor="@android:color/holo_blue_dark"/>
 
 
